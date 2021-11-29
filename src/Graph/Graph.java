@@ -224,4 +224,57 @@ public class Graph<T> {
         }
     }
 
+    public ArrayList<Integer> topSortWithDegree(){
+        int n = adjList.size();
+        ArrayList<Integer> inDegrees = new ArrayList<>();
+        for(int i = 0; i < n; ++i) inDegrees.add(0);
+        for(var u : adjList){
+            for(var v : u){
+                var prevDegree = inDegrees.get(v.to);
+                inDegrees.set(v.to, prevDegree + 1);
+            }
+        }
+//        Queue<Integer> q = new LinkedList<>();
+        PriorityQueue<Integer> q = new PriorityQueue<>((o1, o2) -> -1 * o1.compareTo(o2));
+        for(int i = 0; i < n; ++i){
+            if(inDegrees.get(i) == 0) q.add(i);
+        }
+        System.out.println(q);
+        System.out.println(q.peek());
+        ArrayList<Integer> topSorted = new ArrayList<>();
+        while(!q.isEmpty()){
+            var front = q.poll();
+            for(var v : adjList.get(front)){
+                var prev = inDegrees.get(v.to);
+                if(prev == 1){
+                    q.add(v.to);
+                }
+                inDegrees.set(v.to, prev - 1);
+            }
+            topSorted.add(front);
+        }
+        if(topSorted.size() != n) return null;
+        return topSorted;
+
+    }
+
+    public void setMapTest(){
+        Set<Integer> s = new HashSet<>();
+        Set<Edge<Integer>> st = new HashSet<>();
+        var edge = new Edge<Integer>(0, 5,0);
+        st.add(edge);
+        edge.to = 3;
+        System.out.println(st.contains(edge));
+
+        Set<Edge<Integer>> st2 = new TreeSet<>((o1, o2)->{
+            if(o1.from == o2.from) return o1.to - o2.to;
+            return o1.from - o2.from;
+        });
+        st2.add(edge);
+        System.out.println(st2.contains(edge));
+        edge.to = 1;
+        System.out.println(st2.contains(edge));
+
+    }
+
 }

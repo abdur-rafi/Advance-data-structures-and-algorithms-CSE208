@@ -1,5 +1,7 @@
 package Graph;
 
+import java.util.Objects;
+
 public class Edge <T> {
     public int from, to;
     public T weight;
@@ -23,4 +25,5 @@ public class Edge <T> {
                 ", weight=" + weight +
                 '}';
     }
+
 }

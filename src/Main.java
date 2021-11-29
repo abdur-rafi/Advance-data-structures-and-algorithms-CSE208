@@ -40,18 +40,21 @@ public class Main {
         graph.addEdge(new Edge<Integer>(4, 1, 0), false);
         graph.addEdge(new Edge<Integer>(4, 0, 0), false);
 //        graph.addEdge(new Edge<Integer>(4, 6, 0));
-        graph.addEdge(new Edge<Integer>(3, 4, 0), false);
-        graph.addEdge(new Edge<Integer>(0, 1, 0), false);
+//        graph.addEdge(new Edge<Integer>(3, 4, 0), false);
+//        graph.addEdge(new Edge<Integer>(0, 1, 0), false);
 
 //        graph.addEdge(new Edge<Integer>(1, 0, 0));
 //        graph.addEdge(new Edge<Integer>(1, 0, 0));
 
-        var lst = graph.topologicalSort();
-        System.out.println(lst);
-        var components = graph.StronglyConnectedComponents();
-        System.out.println(components);
+//        var lst = graph.topologicalSort();
+//        System.out.println(lst);
+//        System.out.println(graph.topSortWithDegree());
+//
+//        var components = graph.StronglyConnectedComponents();
+//        System.out.println(components);
 
 //        graph.addEdge(new Edge<Integer>(1, 0, 0));
+        graph.setMapTest();
     }
 
     public static void bipartiteTest(){
@@ -73,8 +76,8 @@ public class Main {
     }
 
     public static void main(String args[]){
-//        graphTest();
-        bipartiteTest();
+        graphTest();
+//        bipartiteTest();
 
     }
 }
