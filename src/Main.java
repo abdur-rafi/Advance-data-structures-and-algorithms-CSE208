@@ -2,13 +2,12 @@ import Graph.Graph;
 import Graph.RedBlackTree;
 import Graph.TreePrinter;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
-import Graph.Edge;
+import java.io.*;
+import java.util.*;
 
+import Graph.Edge;
+import Graph.IntegerAdder;
+import Graph.DoubleAdder;
 public class Main {
 
     public static void rbTreeTest(){
@@ -32,7 +31,8 @@ public class Main {
     }
 
     public static void graphTest(){
-        var graph = new Graph<Integer>(6);
+        IntegerAdder adder = new IntegerAdder();
+        var graph = new Graph<Integer>(6, adder);
         graph.addEdge(new Edge<Integer>(5, 0, 0), false);
         graph.addEdge(new Edge<Integer>(5, 2, 0), false);
         graph.addEdge(new Edge<Integer>(2, 3, 0), false);
@@ -58,7 +58,8 @@ public class Main {
     }
 
     public static void bipartiteTest(){
-        var graph = new Graph<Integer>(7);
+
+        var graph = new Graph<Integer>(7, new IntegerAdder());
         graph.addEdge(new Edge<Integer>(0, 4, 0), true);
         graph.addEdge(new Edge<Integer>(1, 5, 0), true);
         graph.addEdge(new Edge<Integer>(2, 5, 0), true);
@@ -75,9 +76,40 @@ public class Main {
         graph.writeToFile("outputTest.txt");
     }
 
+    public static void offline1(){
+        Graph<Double> graph = new Graph<Double>(new DoubleAdder());
+        String filePath = "src/input.txt";
+        var file = new File(filePath);
+        try (
+                var fileReader = new FileReader(file);
+                var bufferReader = new BufferedReader(fileReader);
+                var scanner = new Scanner(bufferReader)
+        ) {
+            int n = scanner.nextInt();
+            int m = scanner.nextInt();
+            for(int i = 0; i < n; ++i) graph.addNode();
+            for(int i = 0; i < m; ++i){
+                int u = scanner.nextInt();
+                int v = scanner.nextInt();
+                double w = scanner.nextDouble();
+                graph.addEdge(new Edge<>(u, v, w), true);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        var mstEdges = graph.MSTkrushkal();
+        System.out.println(mstEdges);
+        double s = 0;
+        for(var x : mstEdges){
+            s += x.weight;
+        }
+        System.out.println(s);
+    }
+
     public static void main(String args[]){
-        graphTest();
+//        graphTest();
 //        bipartiteTest();
+        offline1();
 
     }
 }

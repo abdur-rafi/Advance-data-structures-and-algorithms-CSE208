@@ -8,14 +8,17 @@ public class Graph<T> {
     private ArrayList<ArrayList<Edge<T>>> adjList;
     private int time = 0;
     private final int WHITE = 0, GREY = 1, BLACK = 2;
-    public Graph(int n){
+    private Adder<T> adder;
+    public Graph(int n, Adder<T> adder){
         adjList = new ArrayList<>();
         for(int i = 0; i < n; ++i){
             adjList.add(new ArrayList<>());
         }
+        this.adder = adder;
     }
-    public Graph(){
+    public Graph(Adder<T> adder){
         adjList = new ArrayList<>();
+        this.adder = adder;
     }
     public void addNode(){
         adjList.add(new ArrayList<>());
@@ -124,7 +127,7 @@ public class Graph<T> {
                 dfsForSCC(i, nodeStack, vis);
             }
         }
-        Graph<T> gT = new Graph<T>(adjList.size());
+        Graph<T> gT = new Graph<T>(adjList.size(), adder);
         for(var u : adjList){
             for(var v : u){
                 gT.addEdge(new Edge<T>(v.to, v.from, v.weight), false);
@@ -202,6 +205,7 @@ public class Graph<T> {
             for(int i = 0; i < m; ++i){
                 int a = scanner.nextInt();
                 int b = scanner.nextInt();
+                double weight = scanner.nextDouble();
                 addEdge(new Edge<T>(a, b), false);
             }
         } catch (FileNotFoundException e) {
@@ -275,6 +279,68 @@ public class Graph<T> {
         edge.to = 1;
         System.out.println(st2.contains(edge));
 
+        Map<Integer, Edge<Integer>> mp = new TreeMap<>();
+
     }
 
+    public ArrayList<Edge<T>> MSTkrushkal(){
+        ArrayList<Edge<T>> edges = new ArrayList<>();
+        for(var u : adjList){
+            edges.addAll(u);
+        }
+        edges.sort((e1, e2)->adder.comp(e1.weight, e2.weight));
+        int m = edges.size();
+        DisJointSet set = new DisJointSet(adjList.size());
+        ArrayList<Edge<T>> mstEdges = new ArrayList<Edge<T>>();
+        for (Edge<T> edge : edges) {
+            if (!set.isInSameSet(edge.from, edge.to)) {
+                mstEdges.add(edge);
+                set.union(edge.from, edge.to);
+            }
+            if (mstEdges.size() == adjList.size() - 1) break;
+        }
+
+        return mstEdges;
+    }
+
+    public ArrayList<Edge<T>> MSTPrim(){
+
+        class nodeDistPair{
+            public int node;
+            public T dist;
+            nodeDistPair(int n, T d){
+                node = n;
+                dist = d;
+            }
+        }
+
+        PriorityQueue<nodeDistPair> pq = new PriorityQueue<>((t1, t2)->{
+            if(adder.comp(t1.dist, t2.dist) == 0){
+                return t1.node - t2.node;
+            }
+            return adder.comp(t1.dist, t2.dist);
+        });
+        int n = adjList.size();
+
+        T mx = adder.zero();
+        for(var u : adjList){
+            for(var v : u) mx = adder.add(mx, v.weight);
+        }
+
+        for(int i = 1; i < n; ++i){
+            pq.add(new nodeDistPair(i, mx));
+        }
+        pq.add(new nodeDistPair(0, adder.zero()));
+
+        ArrayList<Integer> parent = new ArrayList<>();
+        for(int i = 0; i < n ;++i) parent.add(-1);
+        while(!pq.isEmpty()){
+            var top = pq.remove();
+            for(var x : adjList.get(top.node)){
+                
+            }
+        }
+
+        return new ArrayList<Edge<T>>();
+    }
 }
