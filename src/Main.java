@@ -8,6 +8,7 @@ import java.util.*;
 import Graph.Edge;
 import Graph.IntegerAdder;
 import Graph.DoubleAdder;
+import Graph.GraphMST;
 public class Main {
 
     public static void rbTreeTest(){
@@ -32,7 +33,7 @@ public class Main {
 
     public static void graphTest(){
         IntegerAdder adder = new IntegerAdder();
-        var graph = new Graph<Integer>(6, adder);
+        var graph = new Graph<Integer>(6);
         graph.addEdge(new Edge<Integer>(5, 0, 0), false);
         graph.addEdge(new Edge<Integer>(5, 2, 0), false);
         graph.addEdge(new Edge<Integer>(2, 3, 0), false);
@@ -59,7 +60,7 @@ public class Main {
 
     public static void bipartiteTest(){
 
-        var graph = new Graph<Integer>(7, new IntegerAdder());
+        var graph = new Graph<Integer>(7);
         graph.addEdge(new Edge<Integer>(0, 4, 0), true);
         graph.addEdge(new Edge<Integer>(1, 5, 0), true);
         graph.addEdge(new Edge<Integer>(2, 5, 0), true);
@@ -77,7 +78,7 @@ public class Main {
     }
 
     public static void offline1(){
-        Graph<Double> graph = new Graph<Double>(new DoubleAdder());
+        var graph = new GraphMST();
         String filePath = "src/input.txt";
         var file = new File(filePath);
         try (
@@ -97,6 +98,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         var mstEdges = graph.MSTkrushkal();
         System.out.println(mstEdges);
         double s = 0;
@@ -104,6 +106,15 @@ public class Main {
             s += x.weight;
         }
         System.out.println(s);
+
+        mstEdges = graph.MSTPrim();
+        System.out.println(mstEdges);
+        s = 0;
+        for(var x : mstEdges){
+            s += x.weight;
+        }
+        System.out.println(s);
+
     }
 
     public static void main(String args[]){
