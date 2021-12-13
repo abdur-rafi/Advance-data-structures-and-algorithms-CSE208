@@ -8,24 +8,33 @@ public class Graph<T> {
     protected ArrayList<ArrayList<Edge<T>>> adjList;
     protected int time = 0;
     protected final int WHITE = 0, GREY = 1, BLACK = 2;
+    protected ArrayList<Edge<T>> edges;
     public Graph(int n){
         adjList = new ArrayList<>();
+        edges = new ArrayList<Edge<T>>();
         for(int i = 0; i < n; ++i){
             adjList.add(new ArrayList<>());
         }
     }
     public Graph(){
         adjList = new ArrayList<>();
+        edges = new ArrayList<Edge<T>>();
     }
     public void addNode(){
         adjList.add(new ArrayList<>());
     }
     public void addEdge(Edge<T> e, boolean addReverse){
         adjList.get(e.from).add(e);
+        edges.add(e);
         if(addReverse){
             var r = new Edge<T>(e.to, e.from, e.weight);
             adjList.get(r.from).add(r);
+            edges.add(r);
         }
+    }
+
+    public ArrayList<Edge<T>> getEdges(){
+        return edges;
     }
 
     public ArrayList<Integer> bfs(int start){
