@@ -89,15 +89,15 @@ public class GraphMST extends Graph<Double> {
 
         while(!pq.isEmpty()){
 
-            var top = pq.pop();
+            nodeDistPair top = pq.pop();
 
             if(lastEdges.get(top.node) != null){
                 mstEdges.add(lastEdges.get(top.node));
             }
 
             for(var v : adjList.get(top.node)){
-                var currDist = dist.get(v.to);
-                var vPair = new nodeDistPair(v.to, currDist);
+                Double currDist = dist.get(v.to);
+                nodeDistPair vPair = new nodeDistPair(v.to, currDist);
                 if(pq.has(vPair) && v.weight < currDist){
                     dist.set(v.to, v.weight);
                     pq.remove(vPair);

@@ -42,7 +42,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         var gp = parent.parent;
         var childLeftBranch = treeNode.left;
         var childRightBranch = treeNode.right;
-        var side = whichSideToParent(treeNode);
+        int side = whichSideToParent(treeNode);
         if(parent != root)
             assignAsChild(gp, treeNode, whichSideToParent(parent));
 
@@ -57,7 +57,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             childLeftBranch.parent = parent;
 
         }
-        var temp = treeNode.color;
+        boolean temp = treeNode.color;
         treeNode.color = parent.color;
         parent.color = temp;
         if(parent == root){
@@ -83,7 +83,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         while(!temp.leaf){
 //            System.out.println("sdf");
 
-            var comp = temp.value.compareTo(val);
+            int comp = temp.value.compareTo(val);
 //            System.out.println(comp);
             if(comp < 0){
                 temp = temp.right;
@@ -114,8 +114,8 @@ public class RedBlackTree<T extends Comparable<T>> {
                 fix(gp);
         }
         else{
-            var childSide = whichSideToParent(treeNode);
-            var parentSide = whichSideToParent(treeNode.parent);
+            int childSide = whichSideToParent(treeNode);
+            int parentSide = whichSideToParent(treeNode.parent);
             if(childSide != parentSide){
                 rotateWithParent(treeNode);
             }
@@ -177,9 +177,9 @@ public class RedBlackTree<T extends Comparable<T>> {
 
             }
         }
-        var mxHeight = nodesAtHeight.size();
+        int mxHeight = nodesAtHeight.size();
         System.out.println(mxHeight);
-        var leafCount = nodesAtHeight.get(mxHeight - 1).size();
+        int leafCount = nodesAtHeight.get(mxHeight - 1).size();
         int gap = leafCount * 2;
         for(int i = 0; i < mxHeight; ++i){
             int currCount = nodesAtHeight.get(i).size();
@@ -231,8 +231,8 @@ public class RedBlackTree<T extends Comparable<T>> {
                 if(redChild.color != TreeNode.RED){
                     redChild = sibling.right;
                 }
-                var redChildSide = whichSideToParent(redChild);
-                var siblingSide = whichSideToParent(sibling);
+                int redChildSide = whichSideToParent(redChild);
+                int siblingSide = whichSideToParent(sibling);
                 if(redChildSide != siblingSide){
                     rotateWithParent(redChild);
                 }

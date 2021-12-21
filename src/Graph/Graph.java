@@ -142,7 +142,7 @@ public class Graph<T> {
         ArrayList<ArrayList<Integer>> components = new ArrayList<>();
         for(int i = 0; i < adjList.size(); ++i) vis.set(i, false);
         while(!nodeStack.isEmpty()){
-            var top = nodeStack.pop();
+            Integer top = nodeStack.pop();
             if(!vis.get(top)) {
                 Stack<Integer> s = new Stack<>();
                 vis.set(top, true);
@@ -203,7 +203,7 @@ public class Graph<T> {
     public void inputFromFile(String filePath){
         File file = new File(filePath);
         try {
-            var scanner = new Scanner(file);
+            Scanner scanner = new Scanner(file);
             int n = scanner.nextInt();
             int m = scanner.nextInt();
             adjList = new ArrayList<>();
@@ -240,7 +240,7 @@ public class Graph<T> {
         for(int i = 0; i < n; ++i) inDegrees.add(0);
         for(var u : adjList){
             for(var v : u){
-                var prevDegree = inDegrees.get(v.to);
+                Integer prevDegree = inDegrees.get(v.to);
                 inDegrees.set(v.to, prevDegree + 1);
             }
         }
@@ -253,9 +253,9 @@ public class Graph<T> {
         System.out.println(q.peek());
         ArrayList<Integer> topSorted = new ArrayList<>();
         while(!q.isEmpty()){
-            var front = q.poll();
+            Integer front = q.poll();
             for(var v : adjList.get(front)){
-                var prev = inDegrees.get(v.to);
+                Integer prev = inDegrees.get(v.to);
                 if(prev == 1){
                     q.add(v.to);
                 }

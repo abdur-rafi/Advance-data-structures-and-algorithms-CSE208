@@ -2,9 +2,16 @@ package Graph;
 
 import java.util.ArrayList;
 
-public class SinglePairShortestPath extends Graph<Double> {
+public class SinglePairShortestPath extends GraphMST {
 
 
+    public SinglePairShortestPath(int n){
+        super(n);
+    }
+
+    public SinglePairShortestPath(){
+        super();
+    }
 
     public boolean relaxEdge(ArrayList<EdgeDistancePair>distance, Edge<Double> edge){
         if(distance.get(edge.to).distance > distance.get(edge.from).distance + edge.weight){
@@ -105,11 +112,11 @@ public class SinglePairShortestPath extends Graph<Double> {
 
         while(!pq.isEmpty()){
 
-            var top = pq.pop();
+            nodeDistPair top = pq.pop();
 
             for(var v : adjList.get(top.node)){
-                var currDist = distParentList.get(v.to).distance;
-                var vPair = new nodeDistPair(v.to, currDist);
+                double currDist = distParentList.get(v.to).distance;
+                nodeDistPair vPair = new nodeDistPair(v.to, currDist);
                 if(relaxEdge(distParentList, v)){
                     pq.remove(vPair);
                     nodeDistPair nPair = new nodeDistPair(v.to, distParentList.get(v.to).distance);

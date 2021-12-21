@@ -25,7 +25,7 @@ public class DisJointSet {
     public int getRepresentative(int u){
         if(arrList.get(u).parent != u){
 
-            var p = getRepresentative(arrList.get(u).parent);
+            int p = getRepresentative(arrList.get(u).parent);
             arrList.get(u).parent = p;
             return p;
         }
@@ -39,8 +39,8 @@ public class DisJointSet {
     public void union(int u, int v){
 
 
-        var pu = getRepresentative(u);
-        var pv = getRepresentative(v);
+        int pu = getRepresentative(u);
+        int pv = getRepresentative(v);
 
         if(pu == pv) return;
         var pairU = arrList.get(pu);

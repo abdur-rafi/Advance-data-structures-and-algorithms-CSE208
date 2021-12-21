@@ -26,7 +26,7 @@ public class PriorityQueueCustom<T extends Comparable<T>> {
 
 
     public T pop(){
-        var lst = tr.last();
+        T lst = tr.last();
         tr.remove(lst);
         return lst;
     }

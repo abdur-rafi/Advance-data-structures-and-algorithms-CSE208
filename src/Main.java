@@ -11,6 +11,7 @@ import Graph.DoubleAdder;
 import Graph.GraphMST;
 import Graph.SinglePairShortestPath;
 import Graph.EdgeDistancePair;
+import Graph.AllPairShortestPath;
 public class Main {
 
 
@@ -27,7 +28,7 @@ public class Main {
         }
 
         Collections.shuffle(arr);
-        for(var i : arr){
+        for(Integer i : arr){
             TreePrinter.print(rbTree.getRoot());
             rbTree.deleteVal(i);
 
@@ -83,11 +84,11 @@ public class Main {
     public static SinglePairShortestPath inputFromFile(){
         var graph = new SinglePairShortestPath();
         String filePath = "src/inputBellman.txt";
-        var file = new File(filePath);
+        File file = new File(filePath);
         try (
-                var fileReader = new FileReader(file);
-                var bufferReader = new BufferedReader(fileReader);
-                var scanner = new Scanner(bufferReader)
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferReader = new BufferedReader(fileReader);
+                Scanner scanner = new Scanner(bufferReader)
         ) {
             int n = scanner.nextInt();
             int m = scanner.nextInt();
@@ -120,11 +121,11 @@ public class Main {
     public static graphSourceEnd readGraphFromFile(String filePath){
         var spst = new SinglePairShortestPath();
         int s = 0, t = 0;
-        var file = new File(filePath);
+        File file = new File(filePath);
         try (
-                var fileReader = new FileReader(file);
-                var bufferReader = new BufferedReader(fileReader);
-                var scanner = new Scanner(bufferReader)
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferReader = new BufferedReader(fileReader);
+                Scanner scanner = new Scanner(bufferReader)
         ) {
             int n = scanner.nextInt();
             int m = scanner.nextInt();
@@ -147,11 +148,11 @@ public class Main {
     public static void offline1(){
         var graph = new GraphMST();
         String filePath = "src/inputBellman.txt";
-        var file = new File(filePath);
+        File file = new File(filePath);
         try (
-                var fileReader = new FileReader(file);
-                var bufferReader = new BufferedReader(fileReader);
-                var scanner = new Scanner(bufferReader)
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferReader = new BufferedReader(fileReader);
+                Scanner scanner = new Scanner(bufferReader)
         ) {
             int n = scanner.nextInt();
             int m = scanner.nextInt();
@@ -184,12 +185,63 @@ public class Main {
 
     }
 
+
+
+    public static AllPairShortestPath readGraphFromFileOffline3(String filePath){
+        AllPairShortestPath apsp = null;
+        int s = 0, t = 0;
+        File file = new File(filePath);
+        try (
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferReader = new BufferedReader(fileReader);
+                Scanner scanner = new Scanner(bufferReader)
+        ) {
+            int n = scanner.nextInt();
+            int m = scanner.nextInt();
+            apsp = new AllPairShortestPath(n);
+            for(int i = 0; i < m; ++i){
+                int u = scanner.nextInt();
+                int v = scanner.nextInt();
+                --u;--v;
+                double w = scanner.nextDouble();
+                apsp.addEdge(new Edge<>(u, v, w), false);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return apsp;
+
+    }
+
+    public static void printMat(double[][] dist){
+//        System.out.println(Arrays.deepToString(dist));
+        for (double[] doubles : dist) {
+            for (double aDouble : doubles) System.out.print(aDouble + " ");
+            System.out.println();
+        }
+    }
+
+    public static void offline3(){
+        AllPairShortestPath apsp = readGraphFromFileOffline3("src/input.txt");
+        double[][] distances = apsp.FloydWarshall();
+        printMat(distances);
+        double[][] allDist = apsp.Johnson();
+        if(allDist == null){
+            System.out.println("Negative cycle exists");
+        }
+        else{
+            printMat(allDist);
+        }
+    }
+
     public static void main(String[] args){
 //        graphTest();
 //        bipartiteTest();
 //        offline1();
 
-        offline2();
+//        offline2();
+        offline3();
+
     }
 
     public static void printPath(int s, int t, ArrayList<EdgeDistancePair> arr){
