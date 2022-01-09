@@ -1,17 +1,10 @@
-import Graph.Graph;
-import Graph.RedBlackTree;
-import Graph.TreePrinter;
+import Graph.*;
 
 import java.io.*;
-import java.util.*;
-
-import Graph.Edge;
-import Graph.IntegerAdder;
-import Graph.DoubleAdder;
-import Graph.GraphMST;
-import Graph.SinglePairShortestPath;
-import Graph.EdgeDistancePair;
-import Graph.AllPairShortestPath;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Scanner;
 public class Main {
 
 
@@ -44,21 +37,6 @@ public class Main {
         graph.addEdge(new Edge<Integer>(1, 3, 0), false);
         graph.addEdge(new Edge<Integer>(4, 1, 0), false);
         graph.addEdge(new Edge<Integer>(4, 0, 0), false);
-//        graph.addEdge(new Edge<Integer>(4, 6, 0));
-//        graph.addEdge(new Edge<Integer>(3, 4, 0), false);
-//        graph.addEdge(new Edge<Integer>(0, 1, 0), false);
-
-//        graph.addEdge(new Edge<Integer>(1, 0, 0));
-//        graph.addEdge(new Edge<Integer>(1, 0, 0));
-
-//        var lst = graph.topologicalSort();
-//        System.out.println(lst);
-//        System.out.println(graph.topSortWithDegree());
-//
-//        var components = graph.StronglyConnectedComponents();
-//        System.out.println(components);
-
-//        graph.addEdge(new Edge<Integer>(1, 0, 0));
         graph.setMapTest();
     }
 
@@ -240,7 +218,190 @@ public class Main {
 //        offline1();
 
 //        offline2();
-        offline3();
+//        offline3();
+//        offline4();
+
+        convertToGraph();
+
+//        double d = 0.0;
+//        Double d2 = 0.0;
+//        System.out.println(d2.compareTo(d));
+    }
+
+
+
+    public static void offline4(){
+        String filePath = "src/input.txt";
+        Graph<Double> g = new Graph<Double>();
+        int s = 0, t = 0;
+        File file = new File(filePath);
+        try {
+            Scanner scanner = new Scanner(file);
+            int n = scanner.nextInt();
+            int m = scanner.nextInt();
+            g = new Graph<Double>(n);
+            for(int i = 0; i < m; ++i){
+                int a = scanner.nextInt();
+                int b = scanner.nextInt();
+                double weight = scanner.nextDouble();
+                g.addEdge(new Edge<Double>(a, b, weight), false);
+            }
+            s = scanner.nextInt();
+            t = scanner.nextInt();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        MaxFlowMinCut maxFlowMinCut = new MaxFlowMinCut(g);
+        maxFlowMinCut.MaxFlow(s, t);
+    }
+
+    public static void printExplanation(ArrayList<Integer> wins,
+                                        ArrayList<Integer> left,
+                                        ArrayList<Integer> sources, ArrayList<String> names,
+                                        ArrayList<ArrayList<Integer>> matchPairs,
+                                        int i
+    ) {
+        System.out.printf("They can win at most %d + %d =  %d%n", wins.get(i), left.get(i),
+                wins.get(i) + left.get(i));
+        if (sources.size() == 1) {
+            System.out.print(names.get(sources.get(0)));
+        } else {
+            for (int j = 0; j < sources.size() - 1; ++j)
+                System.out.print(names.get(sources.get(j)) + ", ");
+            System.out.print(names.get(sources.get(sources.size() - 1)));
+        }
+        int w = 0;
+        int gCount = 0;
+        for (int j = 0; j < sources.size(); ++j) {
+            for (int k = j + 1; k < sources.size(); ++k) {
+                gCount += matchPairs.get(sources.get(j)).get(sources.get(k));
+            }
+        }
+        for (int s : sources)
+            w += wins.get(s);
+        System.out.printf(" %s won total of %d games\n", sources.size() == 1 ? "has" : "have" , w);
+        System.out.printf("The play each other %d games\n", gCount);
+        System.out.printf("So on average, each of the teams in this group wins %d/%d = %.2f\n",
+                gCount + w, sources.size(), ((double) gCount + w) / sources.size());
+
+    }
+
+    public static void convertToGraph() {
+
+        String filePath = "src/input.txt";
+        ArrayList<Integer> wins = new ArrayList<>();
+        ArrayList<Integer> losses = new ArrayList<>();
+        ArrayList<Integer> left = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> matchPairs = new ArrayList<>();
+        Graph<Double> g = new Graph<Double>();
+        File file = new File(filePath);
+        int n = 4;
+        try {
+            Scanner scanner = new Scanner(file);
+            n = scanner.nextInt();
+            for(int i = 0; i < n; ++i){
+                names.add(scanner.next());
+                wins.add(scanner.nextInt());
+                losses.add(scanner.nextInt());
+                left.add(scanner.nextInt());
+                ArrayList<Integer> arr = new ArrayList<>();
+                for(int j = 0; j < n; ++j) {
+                    int t = scanner.nextInt();
+                    arr.add(t);
+                }
+                matchPairs.add(arr);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+
+        }
+        ArrayList<Integer> teamNodes = new ArrayList<>();
+//        ArrayList<ArrayList<Integer>> matchNodes = new ArrayList<>();
+        ArrayList<Integer> teamSources = new ArrayList<>();
+        ArrayList<Integer> teamSinks = new ArrayList<>();
+        ArrayList<Edge<Double>> teamToSinkEdges = new ArrayList<Edge<Double>>();
+
+
+        for(int i = 0; i < n; ++i){
+            int currNode = g.nodeCount();
+            teamNodes.add(currNode);
+            g.addNode();
+            Edge<Double> e = new Edge<Double>(currNode, -1, 0.0);
+            teamToSinkEdges.add(e);
+            g.addEdge(e, false);
+        }
+
+        for(int i = 0; i < n; ++i){
+            teamSources.add(g.nodeCount());
+            g.addNode();
+        }
+
+        for(int i = 0; i < n; ++i){
+            teamSinks.add(g.nodeCount());
+            g.addNode();
+        }
+
+
+
+
+        for(int i = 0; i < n; ++i){
+            for(int j = i; j < n; ++j){
+                 if(matchPairs.get(i).get(j) != 0){
+                     int currNode = g.nodeCount();
+                     g.addNode();
+                     g.addEdge(new Edge<Double>(currNode, teamNodes.get(i), Double.POSITIVE_INFINITY), false);
+                     g.addEdge(new Edge<Double>(currNode, teamNodes.get(j), Double.POSITIVE_INFINITY), false);
+                    for(int k = 0; k < n; ++k){
+                        if(k != i && k != j){
+                            g.addEdge(new Edge<Double>(teamSources.get(k),currNode,matchPairs.get(i).get(j).doubleValue()), false);
+                        }
+                    }
+                 }
+            }
+        }
+
+
+        for(int i = 0; i < n; ++i){
+            boolean cont = false;
+            for(int j = 0; j < n; ++j){
+                teamToSinkEdges.get(j).to = teamSinks.get(i);
+                double weight = wins.get(i) + left.get(i) - wins.get(j);
+                if(weight < 0){
+                    System.out.println(names.get(i) + " is eliminated");
+                    ArrayList<Integer> sources = new ArrayList<>();
+                    sources.add(j);
+                    printExplanation(
+                            wins, left, sources,names, matchPairs, i
+                    );
+                    cont = true;
+                    break;
+                }
+                teamToSinkEdges.get(j).weight = weight;
+            }
+            if(cont) continue;
+            MaxFlowMinCut maxFlowMinCut = new MaxFlowMinCut(g);
+            double flow = maxFlowMinCut.MaxFlow(teamSources.get(i), teamSinks.get(i));
+            double capacity = maxFlowMinCut.edgeCapacityFromNode(teamSources.get(i));
+
+            if(Double.compare(flow, capacity) == 0){
+                continue;
+            }
+
+            System.out.println(names.get(i) + " is eliminated");
+
+            ArrayList<ArrayList<Integer>> cut = maxFlowMinCut.MinCut(teamSources.get(i));
+            ArrayList<Integer> sourceSet = cut.get(0);
+            ArrayList<Integer> sources = new ArrayList<>();
+            for(int s : sourceSet){
+                if(s < n){
+                    sources.add(s);
+                }
+            }
+            printExplanation(wins, left, sources, names, matchPairs, i);
+        }
 
     }
 

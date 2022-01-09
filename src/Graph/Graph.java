@@ -3,7 +3,7 @@ package Graph;
 import java.io.*;
 import java.util.*;
 
-public class Graph<T> {
+public class Graph<T extends Comparable<T> > {
 
     protected ArrayList<ArrayList<Edge<T>>> adjList;
     protected int time = 0;
@@ -11,7 +11,7 @@ public class Graph<T> {
     protected ArrayList<Edge<T>> edges;
     public Graph(int n){
         adjList = new ArrayList<>();
-        edges = new ArrayList<Edge<T>>();
+        edges = new ArrayList<>();
         for(int i = 0; i < n; ++i){
             adjList.add(new ArrayList<>());
         }
@@ -31,6 +31,9 @@ public class Graph<T> {
             adjList.get(r.from).add(r);
             edges.add(r);
         }
+    }
+    public int nodeCount(){
+        return adjList.size();
     }
 
     public ArrayList<Edge<T>> getEdges(){
@@ -54,6 +57,51 @@ public class Graph<T> {
         }
         return levels;
     }
+    public ArrayList<Edge<T>> bfsReturnEdge(int start){
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        ArrayList<Integer> levels = new ArrayList<>();
+        ArrayList<Edge<T>> parentEdges = new ArrayList<Edge<T>>();
+        for(int i = 0; i < adjList.size(); ++i) parentEdges.add(null);
+        for(int i = 0; i < adjList.size(); ++i) levels.add(-1);
+        levels.set(start, 0);
+        while(!q.isEmpty()){
+            int u = q.remove();
+            for(var v : adjList.get(u)){
+                if(levels.get(v.to) == -1){
+                    levels.set(v.to, levels.get(u) + 1);
+                    parentEdges.add(v);
+                    q.add(v.to);
+                }
+            }
+        }
+        return parentEdges;
+    }
+
+    public ArrayList<Edge<T>> bfsReturnEdgeIgnoreZero(int start, T zero){
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        ArrayList<Integer> levels = new ArrayList<>();
+        ArrayList<Edge<T>> parentEdges = new ArrayList<Edge<T>>();
+        for(int i = 0; i < adjList.size(); ++i) parentEdges.add(null);
+        for(int i = 0; i < adjList.size(); ++i) levels.add(-1);
+        levels.set(start, 0);
+        while(!q.isEmpty()){
+            int u = q.remove();
+            for(var v : adjList.get(u)){
+                if(v.weight.compareTo(zero) == 0){
+                    continue;
+                }
+                if(levels.get(v.to) == -1){
+                    levels.set(v.to, levels.get(u) + 1);
+                    parentEdges.set(v.to, v);
+                    q.add(v.to);
+                }
+            }
+        }
+        return parentEdges;
+    }
+
 
     public ArrayList<Integer> dfs(int start){
         ArrayList<Integer> color = new ArrayList<>();
