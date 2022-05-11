@@ -1,4 +1,10 @@
 import Graph.*;
+import Graph.APSP.AllPairShortestPath;
+import Graph.Graph;
+import Graph.MST.GraphMST;
+import Graph.MaxFlowMinCut.MaxFlowMinCut;
+import Graph.RedBlackTree.RedBlackTree;
+import Graph.SPSP.SinglePairShortestPath;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,7 +35,6 @@ public class Main {
     }
 
     public static void graphTest(){
-        IntegerAdder adder = new IntegerAdder();
         var graph = new Graph<Integer>(6);
         graph.addEdge(new Edge<Integer>(5, 0, 0), false);
         graph.addEdge(new Edge<Integer>(5, 2, 0), false);

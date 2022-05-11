@@ -1,6 +1,8 @@
-package Graph;
+package Graph.RedBlackTree;
 
-public class TreeNode<T> implements TreePrinter.PrintableNode {
+import Graph.Graph;
+
+public class TreeNode<T> implements Graph.TreePrinter.PrintableNode {
 
     public static final boolean BLACK = false;
     public static final boolean RED = true;
@@ -60,12 +62,12 @@ public class TreeNode<T> implements TreePrinter.PrintableNode {
     }
 
     @Override
-    public TreePrinter.PrintableNode getLeft() {
+    public Graph.TreePrinter.PrintableNode getLeft() {
         return left;
     }
 
     @Override
-    public TreePrinter.PrintableNode getRight() {
+    public Graph.TreePrinter.PrintableNode getRight() {
         return right;
     }
 

@@ -1,9 +1,10 @@
-package Graph;
+package Graph.MaxFlowMinCut;
 
+
+import Graph.Edge;
+import Graph.Graph;
 
 import java.util.ArrayList;
-
-import static java.lang.Math.min;
 
 public class MaxFlowMinCut {
 
@@ -35,7 +36,7 @@ public class MaxFlowMinCut {
             Edge<Double> e = residualGraphPath.get(curr);
             pathEdges.set(e.from, e.to);
             curr = e.from;
-            minWeight = min(minWeight, e.weight);
+            minWeight = Math.min(minWeight, e.weight);
         }
         for(Edge<Double> e : flowNetwork.getEdges()){
             if(e.to == pathEdges.get(e.from)){

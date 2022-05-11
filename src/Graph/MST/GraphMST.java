@@ -1,4 +1,9 @@
-package Graph;
+package Graph.MST;
+
+import Graph.DisJointSet;
+import Graph.Edge;
+import Graph.Graph;
+import Graph.PriorityQueueCustom;
 
 import java.util.ArrayList;
 import java.util.Comparator;

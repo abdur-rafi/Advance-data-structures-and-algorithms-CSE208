@@ -1,6 +1,6 @@
 package Graph;
 
-import java.util.Arrays;
+import Graph.SPSP.SinglePairShortestPath;
 
 public class GraphAdjMat extends SinglePairShortestPath {
     protected final double[][] adjMat;

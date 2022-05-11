@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Graph<T extends Comparable<T> > {
 
-    protected ArrayList<ArrayList<Edge<T>>> adjList;
+    public ArrayList<ArrayList<Edge<T>>> adjList;
     protected int time = 0;
     protected final int WHITE = 0, GREY = 1, BLACK = 2;
     protected ArrayList<Edge<T>> edges;
@@ -57,6 +57,7 @@ public class Graph<T extends Comparable<T> > {
         }
         return levels;
     }
+
     public ArrayList<Edge<T>> bfsReturnEdge(int start){
         Queue<Integer> q = new LinkedList<>();
         q.add(start);

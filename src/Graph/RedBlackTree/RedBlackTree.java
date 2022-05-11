@@ -1,4 +1,4 @@
-package Graph;
+package Graph.RedBlackTree;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
